@@ -1,9 +1,8 @@
-import SpotifyIcon from "../assets/spotify.png";
+import SpotifyIcon from "../assets/spotify-black.png";
 
 export default function Landing() {
   const handleClick = () => {
-    //window.location.href = 'http://localhost:5001/auth';
-    window.location.href = 'http://localhost:3000/time';
+    window.location.href = 'http://localhost:5001/auth';
     console.log("Spotify OAuth flow started");
   };
   return (
