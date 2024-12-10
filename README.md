@@ -1,5 +1,4 @@
-# STATSIFY <span style="font-size: 0.5em;">Powered by [Spotify](https://open.spotify.com)</span>
----
+# STATSIFY (Powered by [Spotify](https://open.spotify.com))
 STATSIFY is a simple user dashboard that showcases the user's Spotify listening data.
 
 It provides personalized music statistics, including the user's top track, top artist, most recently played song, and other key figures based on their listening trends. The data is categorized into three time ranges: short-term (4 weeks), medium-term (6 months), and long-term (all time).
