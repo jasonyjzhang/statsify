@@ -3,7 +3,6 @@ import axios from "axios";
 import GradientBlock from "../components/GradientBlock";
 import ImageBlock from "../components/ImageBlock";
 import SpotifyIcon from "../assets/spotify-white.png";
-import Landing from "./Landing";
 
 export default function Data({ timeRange }) {
   const [userData, setUserData] = useState(null);

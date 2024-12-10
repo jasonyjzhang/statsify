@@ -24,10 +24,3 @@ export default function App() {
     </div>
   )
 };
-
-/*
-
-          <Route path="/time" element={<Time setTimeRange={setTimeRange} />} />
-          <Route path="/data" element={<Data timeRange={timeRange} />} />
-
-*/

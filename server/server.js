@@ -2,8 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const axios = require('axios');
 const cors = require('cors');
-const { redirect } = require('react-router-dom');
-require('dotenv').config(); // imports dotenv package and immediately calls config() to load the environment variables from the .env file into process.env
+require('dotenv').config();
 
 const app = express();
 const port = 5001;
@@ -56,7 +55,6 @@ finally, it redirects the user to time.js page
 app.get('/callback', async (req, res) => {
   try {
     // exchange
-    console.log('jere');
     const code = req.query.code;
     const tokenResponse = await axios.post('https://accounts.spotify.com/api/token', new URLSearchParams({
       code,
@@ -219,8 +217,6 @@ const clearSession = (req) => {
 }
 
 app.get('/logout', (req, res) => {
-  console.log(req.session);
-  console.log('about to clear session');
   req.session.destroy((error) => {
     if (error) {
       console.error('An error occurred while trying to log out');

@@ -5,6 +5,7 @@ export default function Time({ setTimeRange }) {
   const navigate = useNavigate();
   const [timeIndex, setTimeIndex] = useState(1);
   const times = ["Short Term - Past 4 Weeks", "Medium Term - Past 6 Months", "Long Term - All Time"];
+
   const handleTimeChange = (index) => {
     setTimeIndex(index);
     switch (index) {
@@ -22,9 +23,11 @@ export default function Time({ setTimeRange }) {
         break;
     }
   }
+
   const handleClick = () => {
     navigate("/data");
   }
+
   return (
     <div className={`h-[100svh] md:h-[100vh] md:w-[500px] flex flex-col justify-center items-center space-y-20 md:pt-14 pt-14`}>
       <div className={`text-center space-y-6`}>

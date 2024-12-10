@@ -5,6 +5,7 @@ export default function Landing() {
     window.location.href = 'http://192.168.1.71:5001/auth';
     console.log("Spotify OAuth flow started");
   };
+
   return (
     <div className={`h-[100svh] md:h-[100vh] md:w-[500px] flex flex-col justify-center items-center space-y-20 lg:space-y-28`}>
       <div className={`text-center tracking-wider md:tracking-widest`}>
