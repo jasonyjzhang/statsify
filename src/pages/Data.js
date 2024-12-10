@@ -5,14 +5,14 @@ import ImageBlock from "../components/ImageBlock";
 import SpotifyIcon from "../assets/spotify-white.png";
 import Landing from "./Landing";
 
-export default function Data({timeRange}) {
+export default function Data({ timeRange }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState(null);
 
   useEffect(() => {
     console.log('Getting Data')
-    axios.get(`http://localhost:5001/get-data?time_range=${timeRange}`, { withCredentials: true })
+    axios.get(`http://192.168.1.71:5001/get-data?time_range=${timeRange}`, { withCredentials: true })
       .then(response => {
         setUserData(response.data);
         setDisplayName(response.data.userProfile.display_name || response.data.userProfile.email || "Spotify User");
@@ -54,12 +54,12 @@ export default function Data({timeRange}) {
   }
 
   return (
-    <div className={`w-full h-[100dvh] md:w-[600px] lg:w-[700px] md:flex md:flex-col md:justify-center`}>
+    <div className={`h-[100svh] md:h-[100vh] w-full md:w-[600px] lg:w-[700px] md:flex md:flex-col md:justify-center pt-20 md:pt-14`}>
       {
         loading ?
-        (<p className={`hidden md:flex gradient-text justify-center text-[2rem]`}>we are testing your patience :)</p>) :
+        (<p className={`flex gradient-text justify-center text-[2rem] text-center`}>we are testing your patience :)</p>) :
         (
-          <div className={`grid grid-cols-2 md:grid-cols-3 gap-6`}>
+          <div className={`grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-6`}>
 
             <ImageBlock
               image={userData.userProfile.images}

@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const axios = require('axios');
 const cors = require('cors');
+const { redirect } = require('react-router-dom');
 require('dotenv').config(); // imports dotenv package and immediately calls config() to load the environment variables from the .env file into process.env
 
 const app = express();
@@ -21,7 +22,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://192.168.1.71:3000',
   credentials: true,
 }));
 
@@ -34,12 +35,12 @@ app.get('/auth', (req, res) => {
   // check access token and its validity
   if (req.session.access_token && !isTokenExpired(req.session.token_expiration)) {
     console.log('user is already authenticated, redirecting to time.js');
-    return res.redirect('http://localhost:3000/time');
+    return res.redirect('http://192.168.1.71:3000/time');
   }
   // authorization request setup
   const scopes = "user-read-private user-read-email user-top-read user-read-recently-played";
   // repsonse_type=code Authorization Code Grant Flow for OAuth
-  const authURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${scopes}&response_type=code`;
+  const authURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${scopes}&response_type=code&show_dialog=true`;
   // redirect
   console.log('redirecting from /auth to Spotify OAuth screen');
   res.redirect(authURL);
@@ -55,6 +56,7 @@ finally, it redirects the user to time.js page
 app.get('/callback', async (req, res) => {
   try {
     // exchange
+    console.log('jere');
     const code = req.query.code;
     const tokenResponse = await axios.post('https://accounts.spotify.com/api/token', new URLSearchParams({
       code,
@@ -74,7 +76,7 @@ app.get('/callback', async (req, res) => {
     req.session.userData = { userProfile };
     // redirect
     console.log('redirecting from /callback to Time.js');
-    res.redirect('http://localhost:3000/time')
+    res.redirect('http://192.168.1.71:3000/time')
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('An error occurred while trying to authenticate with Spotify or to fetch user profile information');
@@ -173,7 +175,7 @@ app.get('/get-data', async(req, res) => {
   try {
     if (!req.session || isTokenExpired(req.session.token_expiration)) {
       clearSession(req);
-      return res.redirect('http://localhost:3000/');
+      return res.redirect('http://192.168.1.71:3000/');
     }
     const { time_range = 'medium_term'} = req.query;
     const cachedData = req.session.userData[time_range] || {};
@@ -217,15 +219,19 @@ const clearSession = (req) => {
 }
 
 app.get('/logout', (req, res) => {
+  console.log(req.session);
+  console.log('about to clear session');
   req.session.destroy((error) => {
     if (error) {
       console.error('An error occurred while trying to log out');
       return res.status(500).send('Error logging out');
     }
-    res.redirect('http://localhost:3000/');
+    console.log(req.session);
+    console.log('session cleared');
+    res.send({ message: 'Logged out from the backend' });
   });
-})
+});
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });

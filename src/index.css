@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 * {
-  background-color: #121212;
   color: #FFFFFF;
+}
+
+body {
+  background-color: #121212;
 }
 
 .gradient-text {
