@@ -222,7 +222,6 @@ app.get('/logout', (req, res) => {
       console.error('An error occurred while trying to log out');
       return res.status(500).send('Error logging out');
     }
-    console.log(req.session);
     console.log('session cleared');
     res.send({ message: 'Logged out from the backend' });
   });
