@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'https://statsify.jasonzhang.studio/',
+  origin: 'https://statsify.jasonzhang.studio',
   credentials: true,
 }));
 
