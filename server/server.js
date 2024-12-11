@@ -16,7 +16,8 @@ app.use(session({
   cookie: {
     maxAge: 3600000,
     httpOnly: true,
-    secure: true
+    secure: true,
+    sameSite: 'None'
   },
 }));
 
@@ -176,7 +177,7 @@ app.get('/get-data', async(req, res) => {
       return res.redirect('https://statsify.jasonzhang.studio/');
     }
     const { time_range = 'medium_term'} = req.query;
-    console.log(req.session.userData);
+    console.log(req.session);
     const cachedData = req.session.userData[time_range] || {};
     const [topTrack, topArtist, recentlyPlayed] = await Promise.all([
       cachedData.topTrack || getTopTrack(req.session.access_token, time_range),
