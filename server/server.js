@@ -34,7 +34,7 @@ app.get('/auth', (req, res) => {
   // check access token and its validity
   if (req.session.access_token && !isTokenExpired(req.session.token_expiration)) {
     console.log('user is already authenticated, redirecting to time.js');
-    return res.redirect('https://statsify.jasonzhang.studio//time');
+    return res.redirect('https://statsify.jasonzhang.studio/time');
   }
   // authorization request setup
   const scopes = "user-read-private user-read-email user-top-read user-read-recently-played";
