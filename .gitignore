@@ -12,6 +12,7 @@
 
 # production
 /build
+/client/build
 
 # environment variables & OS-specific files
 .DS_Store

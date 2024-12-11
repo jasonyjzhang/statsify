@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://192.168.1.71:3000',
+  origin: 'https://statsify.jasonzhang.studio/',
   credentials: true,
 }));
 
@@ -34,7 +34,7 @@ app.get('/auth', (req, res) => {
   // check access token and its validity
   if (req.session.access_token && !isTokenExpired(req.session.token_expiration)) {
     console.log('user is already authenticated, redirecting to time.js');
-    return res.redirect('http://192.168.1.71:3000/time');
+    return res.redirect('https://statsify.jasonzhang.studio//time');
   }
   // authorization request setup
   const scopes = "user-read-private user-read-email user-top-read user-read-recently-played";
@@ -74,7 +74,7 @@ app.get('/callback', async (req, res) => {
     req.session.userData = { userProfile };
     // redirect
     console.log('redirecting from /callback to Time.js');
-    res.redirect('http://192.168.1.71:3000/time')
+    res.redirect('https://statsify.jasonzhang.studio/time')
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('An error occurred while trying to authenticate with Spotify or to fetch user profile information');
@@ -173,7 +173,7 @@ app.get('/get-data', async(req, res) => {
   try {
     if (!req.session || isTokenExpired(req.session.token_expiration)) {
       clearSession(req);
-      return res.redirect('http://192.168.1.71:3000/');
+      return res.redirect('https://statsify.jasonzhang.studio/');
     }
     const { time_range = 'medium_term'} = req.query;
     const cachedData = req.session.userData[time_range] || {};
@@ -227,6 +227,6 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
