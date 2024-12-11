@@ -2,7 +2,7 @@ import SpotifyIcon from "../assets/spotify-black.png";
 
 export default function Landing() {
   const handleClick = () => {
-    window.location.href = 'http://192.168.1.71:5001/auth';
+    window.location.href = 'https://statsify-aq27.onrender.com/auth';
     console.log("Spotify OAuth flow started");
   };
 

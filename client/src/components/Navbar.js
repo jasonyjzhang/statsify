@@ -9,10 +9,10 @@ export default function Navbar({ currentPage }) {
   }
 
   const handleLogout = () => {
-    axios.get(`http://192.168.1.71:5001/logout`, { withCredentials: true })
+    axios.get(`https://statsify-aq27.onrender.com/logout`, { withCredentials: true })
       .then(() => {
         window.open('https://accounts.spotify.com/logout', '_blank');
-        window.location.href = 'http://192.168.1.71:3000';
+        window.location.href = 'https://statsify.jasonzhang.studio/';
       })
       .catch(error => {
         console.error('Error logging out:', error);
