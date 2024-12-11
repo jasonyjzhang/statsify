@@ -73,6 +73,7 @@ app.get('/callback', async (req, res) => {
     const userProfile = await getUserProfile(access_token);
     req.session.userId = userProfile.id;
     req.session.userData = { userProfile };
+    console.log('Session after setting:', req.session);
     // redirect
     console.log('redirecting from /callback to Time.js');
     res.redirect('https://statsify.jasonzhang.studio/time')
