@@ -14,9 +14,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 36000000,
-    httpOnly: true, // true to prevent client-side JavaScript from accessing the cookie
-    secure: false // false for testing, remember to change this to true for production
+    maxAge: 3600000,
+    httpOnly: true,
+    secure: true
   },
 }));
 
@@ -176,6 +176,7 @@ app.get('/get-data', async(req, res) => {
       return res.redirect('https://statsify.jasonzhang.studio/');
     }
     const { time_range = 'medium_term'} = req.query;
+    console.log(req.session.userData);
     const cachedData = req.session.userData[time_range] || {};
     const [topTrack, topArtist, recentlyPlayed] = await Promise.all([
       cachedData.topTrack || getTopTrack(req.session.access_token, time_range),
