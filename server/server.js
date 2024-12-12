@@ -9,7 +9,6 @@ const port = 5001;
 
 const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SESSION_SECRET} = process.env;
 
-app.set('trust proxy', 1)
 
 app.use(session({
   secret: SESSION_SECRET,
