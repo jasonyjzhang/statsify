@@ -10,7 +10,6 @@ export default function Data({ timeRange }) {
   const [displayName, setDisplayName] = useState(null);
 
   useEffect(() => {
-    console.log('Getting Data')
     axios.get(`https://statsify-aq27.onrender.com/get-data?time_range=${timeRange}`, { withCredentials: true })
       .then(response => {
         setUserData(response.data);
