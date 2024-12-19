@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 const port = 5001;
 
-const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SESSION_SECRET} = process.env;
+const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SESSION_SECRET } = process.env;
 
 app.set('trust proxy', 1);
 
@@ -99,7 +99,7 @@ async function getUserProfile(access_token) {
       email,
       followers: followers.total,
       id,
-      images: images[0].url,
+      images: images && images.length > 0 ? images[0].url : null,
       product,
     };
   } catch (error) {
