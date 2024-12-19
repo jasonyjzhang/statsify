@@ -19,7 +19,8 @@ app.use(session({
     maxAge: 3600000,
     httpOnly: true,
     secure: true,
-    sameSite: 'None'
+    sameSite: 'None',
+    domain: '.jasonzhang.studio',
   },
 }));
 

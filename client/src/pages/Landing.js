@@ -2,7 +2,7 @@ import SpotifyIcon from "../assets/spotify-black.png";
 
 export default function Landing() {
   const handleClick = () => {
-    window.location.href = 'https://statsify-aq27.onrender.com/auth';
+    window.location.href = 'https://statsify-backend.jasonzhang.studio/auth';
     console.log("Spotify OAuth flow started");
   };
 
