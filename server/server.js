@@ -27,6 +27,8 @@ app.use(cors({
   credentials: true,
 }));
 
+app.set('trust proxy', 1);
+
 /*
 this code handles the authorization process by checking if the user is already authenticated.
 if the user has a valid access token that hasn't expired, they are redirected to time.js
