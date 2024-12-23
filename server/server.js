@@ -9,14 +9,12 @@ const port = 5001;
 
 const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SESSION_SECRET } = process.env;
 
-app.set('trust proxy', 1);
-
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 3600000,
+    maxAge: 1000 * 60 * 60, // 1 hour
     httpOnly: true,
     secure: true,
     sameSite: 'None',
@@ -37,7 +35,7 @@ otherwise, the user is redirected to the Spotify authorization page
 app.get('/auth', (req, res) => {
   // check access token and its validity
   if (req.session.access_token && !isTokenExpired(req.session.token_expiration)) {
-    console.log('user is already authenticated, redirecting to time.js');
+    console.log('existing user, redirecting to /time');
     return res.redirect('https://statsify.jasonzhang.studio/time');
   }
   // authorization request setup
@@ -45,7 +43,7 @@ app.get('/auth', (req, res) => {
   // repsonse_type=code Authorization Code Grant Flow for OAuth
   const authURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${scopes}&response_type=code&show_dialog=true`;
   // redirect
-  console.log('redirecting from /auth to Spotify OAuth screen');
+  console.log('new user, redirecting to Spotify Login');
   res.redirect(authURL);
 });
 
@@ -62,27 +60,26 @@ app.get('/callback', async (req, res) => {
     const code = req.query.code;
     const tokenResponse = await axios.post('https://accounts.spotify.com/api/token', new URLSearchParams({
       code,
-      redirect_uri: REDIRECT_URI,
       grant_type: 'authorization_code',
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
+      redirect_uri: REDIRECT_URI,
     }));
     // stores access token and expiration in session
-    const { access_token, expires_in} = tokenResponse.data;
+    const { access_token, expires_in } = tokenResponse.data;
     req.session.access_token = access_token;
     req.session.token_expiration = Date.now() + expires_in * 1000;
-    console.log('successfully received and stored user access token and expiration');
+    console.log('successfully retrieved and stored user access token and token expiration');
     // fetches user profile information
     const userProfile = await getUserProfile(access_token);
     req.session.userId = userProfile.id;
     req.session.userData = { userProfile };
-    console.log('Session after setting:', req.session);
+    console.log('redirecting from /callback to /time');
     // redirect
-    console.log('redirecting from /callback to Time.js');
     res.redirect('https://statsify.jasonzhang.studio/time')
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).send('An error occurred while trying to authenticate with Spotify or to fetch user profile information');
+    res.status(500).send('An error occurred while trying to authenticate with Spotify');
   }
 });
 
@@ -93,7 +90,7 @@ async function getUserProfile(access_token) {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { display_name, email, followers, id, images, product} = userProfileResponse.data;
-    console.log('successfully fetched user profile');
+    console.log('successfully retrieved user profile');
     return {
       display_name,
       email,
@@ -115,7 +112,7 @@ async function getTopTrack(access_token, time_range) {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { total, items } = topTrackResponse.data;
-    console.log('successfully fetched top track');
+    console.log('successfully retrieved top track');
     return {
       total,
       image: items[0].album.images[1].url,
@@ -136,7 +133,7 @@ async function getTopArtist(access_token, time_range) {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { total, items } = topArtistResponse.data;
-    console.log('successfully fetched top artist');
+    console.log('successfully retrieved top artist');
     return {
       total,
       image: items[0].images[1].url,
@@ -156,7 +153,7 @@ async function getRecentlyPlayed(access_token) {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { items } = recentlyPlayedResponse.data;
-    console.log('successfully fetched recently played');
+    console.log('successfully retrieved recently played');
     return {
       image: items[0].track.album.images[1].url,
       artist: items[0].track.artists[0].name,
@@ -175,13 +172,14 @@ if the session is valid, it fetches the user's top track, top artist, and recent
 the data is either retrieved from the session cache or fetched from Spotify's API if not available (and cached)
 */
 app.get('/get-data', async(req, res) => {
+  console.log(req.session.token_expiration);
   try {
     if (!req.session || isTokenExpired(req.session.token_expiration)) {
       clearSession(req);
+      console.log('session not valid or expired, redirecting to landing page');
       return res.redirect('https://statsify.jasonzhang.studio');
     }
     const { time_range = 'medium_term'} = req.query;
-    console.log(req.session);
     const cachedData = req.session.userData[time_range] || {};
     const [topTrack, topArtist, recentlyPlayed] = await Promise.all([
       cachedData.topTrack || getTopTrack(req.session.access_token, time_range),
@@ -213,25 +211,24 @@ const isTokenExpired = (expirationTime) => {
 }
 
 // this helper function clears a session
-const clearSession = (req) => {
-  console.log('clearing session');
+const clearSession = (req, res) => {
   req.session.destroy((error) => {
     if (error) {
       console.error('An error occurred while trying to clear session');
+      return res.status(500).send('Error clearing session');
+    } else {
+      res.clearCookie('connect.sid', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        domain: '.jasonzhang.studio',
+      });
     }
+    console.log('session cleared');
   })
 }
 
-app.get('/logout', (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      console.error('An error occurred while trying to log out');
-      return res.status(500).send('Error logging out');
-    }
-    console.log('session cleared');
-    res.send({ message: 'Logged out from the backend' });
-  });
-});
+app.get('/logout', clearSession);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
