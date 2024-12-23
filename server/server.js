@@ -227,6 +227,7 @@ const clearSession = (req, res) => {
       });
     }
     console.log('session cleared');
+    res.send({ message: 'Session cleared and logged out from the backend' });
   })
 }
 
