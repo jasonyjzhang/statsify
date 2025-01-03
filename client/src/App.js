@@ -24,3 +24,9 @@ export default function App() {
     </div>
   )
 };
+/*
+      <Navbar currentPage={currentPage} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/time" element={<Time setTimeRange={setTimeRange} />} />
+        <Route path="/data" element={<Data timeRange={timeRange} />} />
+*/

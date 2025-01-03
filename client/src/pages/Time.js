@@ -29,12 +29,12 @@ export default function Time({ setTimeRange }) {
   }
 
   return (
-    <div className={`h-[100svh] md:h-[100vh] md:w-[500px] flex flex-col justify-center items-center space-y-20 md:pt-14 pt-14`}>
-      <div className={`text-center space-y-6`}>
+    <div className={`h-[100svh] md:h-[100vh] md:w-[500px] flex flex-col justify-center items-center space-y-16 pt-14 md:pt-0`}>
+      <div className={`text-center space-y-4`}>
         <h1 className={`text-[2.5rem] font-bold`}>Hello</h1>
-        <h2>Please select a time span:</h2>
+        <h2>Please select a time range:</h2>
       </div>
-      <div className={`space-y-12`}>
+      <div className={`space-y-10 md:space-y-12`}>
         {
           times.map((time, index) => {
             return (

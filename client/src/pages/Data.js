@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import GradientBlock from "../components/GradientBlock";
 import ImageBlock from "../components/ImageBlock";
-import SpotifyIcon from "../assets/spotify-white.png";
+import SpotifyIcon from "../assets/spotify-icon-white.svg";
+import { waveform } from "ldrs";
+waveform.register()
 
 export default function Data({ timeRange }) {
   const [userData, setUserData] = useState(null);
@@ -46,16 +48,16 @@ export default function Data({ timeRange }) {
     } else if (string.length <= 20) {
       fontSize = 'text-[1rem] lg:text-[1.25rem]';
     } else {
-      fontSize = 'text-[0.75rem] lg:text-[1rem]';
+      fontSize = 'text-[1rem]';
     }
     return fontSize;
   }
 
   return (
-    <div className={`h-[100svh] md:h-[100vh] w-full md:w-[600px] lg:w-[700px] md:flex md:flex-col md:justify-center pt-20 md:pt-14`}>
+    <div className={`h-[100svh] md:h-[100vh] w-full md:w-[600px] lg:w-[700px] md:flex md:flex-col md:justify-center ${loading && 'flex justify-center items-center'} pt-20 md:pt-14`}>
       {
         loading ?
-        (<p className={`flex gradient-text justify-center text-[2rem] text-center`}>we are testing your patience :)</p>) :
+        (<l-waveform size="50" stroke="5" speed="1" color="white"></l-waveform>) :
         (
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-6`}>
 
