@@ -57,9 +57,9 @@ export default function Data({ timeRange }) {
                 <span className={`flex items-center bg-dark rounded gap-x-4 p-3 md:p-4`}>
                   <img src={userPic} alt="user profile picture" className={`w-20 h-20 md:w-24 md:h-24 object-cover rounded`}/>
                   <div className={`md:space-y-1`}>
-                    <p className={`text-xl font-semibold`}>{displayName || name}</p>
-                    <p className={`text-dark-gray`}>{subscriptionType || accountType}</p>
-                    <p className={`text-dark-gray`}>{followerCount || followers}</p>
+                    <p className={`text-xl font-semibold`}>{displayName}</p>
+                    <p className={`text-dark-gray`}>{subscriptionType}</p>
+                    <p className={`text-dark-gray`}>{followerCount}</p>
                   </div>
                 </span>
               </div>
@@ -71,20 +71,20 @@ export default function Data({ timeRange }) {
 
               <div className={`flex flex-col items-center order-2 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
                 <img src={TrackIcon} alt="music note icon" className={`w-8 md:w-10`}/>
-                <p className={`text-3xl text-custom-red`}>{numTracks || userData.topTrack.total}</p>
+                <p className={`text-3xl text-custom-red`}>{userData.topTracks.total}</p>
                 <p className={`text-dark-gray`}>Unique Tracks</p>
               </div>
 
               <div className={`flex flex-col items-center order-3 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
                 <img src={ArtistIcon} alt="artist icon" className={`w-8 md:w-10`}/>
-                <p className={`text-3xl text-custom-yellow`}>{numArtists || userData.topArtist.total}</p>
+                <p className={`text-3xl text-custom-yellow`}>{userData.topArtists.total}</p>
                 <p className={`text-dark-gray`}>Unique Artists</p>
               </div>
 
               <div className={`flex flex-col items-center md:justify-end order-4 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
                 <div className={`text-center`}>
-                  <p className={`text-lg`}>{recentSong || userData.recentlyPlayed.name}</p>
-                  <p className={`text-dark-gray`}>{recentArtist || userData.recentlyPlayed.artist}</p>
+                  <p className={`text-lg`}>{userData.recentlyPlayed.name}</p>
+                  <p className={`text-dark-gray`}>{userData.recentlyPlayed.artist}</p>
                 </div>
                 <hr className={`w-full h-[1px] border-t-2 border-border-gray`}/>
                 <p className={`text-dark-gray`}>Recently Played</p>
