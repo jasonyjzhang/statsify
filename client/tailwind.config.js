@@ -13,8 +13,10 @@ module.exports = {
       },
       colors: {
         'dark': '#121212',
-        'gray': '#EDEDED',
         'dark-gray': '#666666',
+        'border-gray': '#252525',
+        'custom-red': '#FF7369',
+        'custom-yellow': '#FFD48E',
       },
     },
   },

@@ -108,19 +108,21 @@ async function getUserProfile(access_token) {
 }
 
 // this helper function fetches the user's top track information
-async function getTopTrack(access_token, time_range) {
+async function getTopTracks(access_token, time_range) {
   try {
-    const topTrackResponse = await axios.get(`https://api.spotify.com/v1/me/top/tracks?limit=1&time_range=${time_range}`, {
+    const topTrackResponse = await axios.get(`https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=${time_range}`, {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { total, items } = topTrackResponse.data;
     console.log('successfully retrieved top track');
     return {
       total,
-      image: items[0].album.images[1].url,
-      artist: items[0].artists[0].name,
-      name: items[0].name,
-      popularity: items[0].popularity
+      tracks: items.map(track => ({
+        image: track.album.images[1].url,
+        artist: track.artists[0].name,
+        name: track.name,
+        popularity: track.popularity
+      }))
     };
   } catch (error) {
     console.error('Error:', error);
@@ -129,18 +131,20 @@ async function getTopTrack(access_token, time_range) {
 }
 
 // this helper function fetches the user's top artist information
-async function getTopArtist(access_token, time_range) {
+async function getTopArtists(access_token, time_range) {
   try {
-    const topArtistResponse = await axios.get(`https://api.spotify.com/v1/me/top/artists?limit=1&time_range=${time_range}`, {
+    const topArtistResponse = await axios.get(`https://api.spotify.com/v1/me/top/artists?limit=10&time_range=${time_range}`, {
       headers: { Authorization: `Bearer ${access_token}` },
     });
     const { total, items } = topArtistResponse.data;
     console.log('successfully retrieved top artist');
     return {
       total,
-      image: items[0].images[1].url,
-      name: items[0].name,
-      popularity: items[0].popularity
+      artists: items.map(artist => ({
+        image: artist.images[1].url,
+        name: artist.name,
+        popularity: artist.popularity
+      }))
     };
   } catch (error) {
     console.error('Error:', error);
@@ -183,16 +187,16 @@ app.get('/get-data', async(req, res) => {
     }
     const { time_range = 'medium_term'} = req.query;
     const cachedData = req.session.userData[time_range] || {};
-    const [topTrack, topArtist, recentlyPlayed] = await Promise.all([
-      cachedData.topTrack || getTopTrack(req.session.access_token, time_range),
-      cachedData.topArtist || getTopArtist(req.session.access_token, time_range),
+    const [topTracks, topArtists, recentlyPlayed] = await Promise.all([
+      cachedData.topTracks || getTopTracks(req.session.access_token, time_range),
+      cachedData.topArtists || getTopArtists(req.session.access_token, time_range),
       getRecentlyPlayed(req.session.access_token),
     ]);
     req.session.userData = {
       ...req.session.userData,
       [time_range] : {
-        topTrack,
-        topArtist,
+        topTracks,
+        topArtists,
         recentlyPlayed
       }
     };

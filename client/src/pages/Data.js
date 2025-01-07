@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import GradientBlock from "../components/GradientBlock";
-import ImageBlock from "../components/ImageBlock";
-import SpotifyIcon from "../assets/spotify-icon-white.svg";
+import UserIcon from "../assets/user-icon.svg";
+import SpotifyIconWhite from "../assets/spotify-icon-white.svg";
+import TrackIcon from "../assets/track-icon.svg";
+import ArtistIcon from "../assets/artist-icon.svg";
+import RankingIcon from "../assets/ranking-icon.svg";
+import RankingBlock from "../components/RankingBlock";
 import { waveform } from "ldrs";
 waveform.register()
 
 export default function Data({ timeRange }) {
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [displayName, setDisplayName] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     axios.get(`https://statsify-backend.jasonzhang.studio/get-data?time_range=${timeRange}`, { withCredentials: true })
       .then(response => {
         setUserData(response.data);
-        setDisplayName(response.data.userProfile.display_name || response.data.userProfile.email || "Spotify User");
         setTimeout(() => {
           setLoading(false);
         }, 2000);
@@ -24,8 +25,12 @@ export default function Data({ timeRange }) {
         console.error(error);
         setLoading(false);
       });
-  }, [timeRange]);
+  }, []);
 
+  const displayName = userData && (userData.userProfile.display_name || userData.userProfile.email || "Spotify User");
+  const subscriptionType = userData && `${userData.userProfile.product.charAt(0).toUpperCase() + userData.userProfile.product.slice(1)} Account`;
+  const followerCount = userData && `${userData.userProfile.followers} ${userData.userProfile.followers < 2 ? 'Follower' : 'Followers'}`;
+  const userPic = userData && (userData.userProfile.images || UserIcon);
   const timeToDisplay = (timeRange) => {
     switch (timeRange) {
       case "short_term":
@@ -38,108 +43,78 @@ export default function Data({ timeRange }) {
         return "6 Months";
     }
   }
-
-  const checkStrLength = (string) => {
-    let fontSize;
-    if (string.length <= 10) {
-      fontSize = 'text-[1.5rem] lg:text-[1.75rem]';
-    } else if (string.length <= 14) {
-      fontSize = 'text-[1.25rem] lg:text-[1.5rem]';
-    } else if (string.length <= 20) {
-      fontSize = 'text-[1rem] lg:text-[1.25rem]';
-    } else {
-      fontSize = 'text-[1rem]';
-    }
-    return fontSize;
-  }
-
   return (
-    <div className={`h-[100svh] md:h-[100vh] w-full md:w-[600px] lg:w-[700px] md:flex md:flex-col md:justify-center ${loading && 'flex justify-center items-center'} pt-20 md:pt-14`}>
+    <div className={`w-full md:w-[600px] lg:w-[700px] ${loading && 'h-[100svh] flex justify-center items-center'}`}>
       {
         loading ?
         (<l-waveform size="50" stroke="5" speed="1" color="white"></l-waveform>) :
         (
-          <div className={`grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-6`}>
+          <div className={`mt-24 w-full space-y-16`}>
 
-            <ImageBlock
-              image={userData.userProfile.images}
-              topSubtitle="Welcome"
-              title={displayName}
-              bottomSubtitle={`${userData.userProfile.product.charAt(0).toUpperCase() + userData.userProfile.product.slice(1)} Account`}
-              order="md:order-[5]"
-              textSize={checkStrLength(displayName)}
-              profileBlock={true}
-            />
+            <div className={`grid grid-cols-2 md:grid-cols-3 gap-4`}>
 
-            <GradientBlock
-              gradient
-              topSubtitle="Total of"
-              title={userData.userProfile.followers}
-              bottomSubtitle={userData.userProfile.followers < 2 ? "Follower" : "Followers"}
-              order="md:order-[2]"
-            />
+              <div className={`col-span-2 order-1 bg-gradient-summer rounded p-0.5`}>
+                <span className={`flex items-center bg-dark rounded gap-x-4 p-3 md:p-4`}>
+                  <img src={userPic} alt="user profile picture" className={`w-20 h-20 md:w-24 md:h-24 object-cover rounded`}/>
+                  <div className={`md:space-y-1`}>
+                    <p className={`text-xl font-semibold`}>{displayName || name}</p>
+                    <p className={`text-dark-gray`}>{subscriptionType || accountType}</p>
+                    <p className={`text-dark-gray`}>{followerCount || followers}</p>
+                  </div>
+                </span>
+              </div>
 
-            <GradientBlock
-              gradient
-              topSubtitle="Played"
-              title={userData.topTrack.total}
-              bottomSubtitle="Unique Tracks"
-              order="md:order-[1]"
-            />
+              <div className={`flex flex-col justify-center items-center order-5 md:order-2 border-2 border-border-gray rounded space-y-2`}>
+                <img src={SpotifyIconWhite} alt="Spotify icon in white" className={`w-10 md:w-12`}/>
+                <a href="https://open.spotify.com/user/spotify" target="_blank" rel="noopener noreferrer" className={`underline underline-offset-4`}>Open Spotify</a>
+              </div>
 
-            <ImageBlock
-              image={userData.topTrack.image}
-              topSubtitle="Top Track"
-              title={userData.topTrack.name}
-              bottomSubtitle={`By ${userData.topTrack.artist}`}
-              order="md:order-[4]"
-              textSize={checkStrLength(userData.topTrack.name)}
-            />
+              <div className={`flex flex-col items-center order-2 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
+                <img src={TrackIcon} alt="music note icon" className={`w-8 md:w-10`}/>
+                <p className={`text-3xl text-custom-red`}>{numTracks || userData.topTrack.total}</p>
+                <p className={`text-dark-gray`}>Unique Tracks</p>
+              </div>
 
-            <ImageBlock
-              image={userData.topArtist.image}
-              topSubtitle="Top Artist"
-              title={userData.topArtist.name}
-              bottomSubtitle="invisible"
-              order="md:order-[6]"
-              invisible={true}
-              textSize={checkStrLength(userData.topArtist.name)}
-            />
+              <div className={`flex flex-col items-center order-3 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
+                <img src={ArtistIcon} alt="artist icon" className={`w-8 md:w-10`}/>
+                <p className={`text-3xl text-custom-yellow`}>{numArtists || userData.topArtist.total}</p>
+                <p className={`text-dark-gray`}>Unique Artists</p>
+              </div>
 
-            <GradientBlock
-              gradient
-              topSubtitle="Listened to"
-              title={userData.topArtist.total}
-              bottomSubtitle="Unique Artists"
-              order="md:order-[3]"
-            />
+              <div className={`flex flex-col items-center md:justify-end order-4 border-2 border-border-gray gap-y-2 md:gap-y-4 p-2 md:p-4 rounded`}>
+                <div className={`text-center`}>
+                  <p className={`text-lg`}>{recentSong || userData.recentlyPlayed.name}</p>
+                  <p className={`text-dark-gray`}>{recentArtist || userData.recentlyPlayed.artist}</p>
+                </div>
+                <hr className={`w-full h-[1px] border-t-2 border-border-gray`}/>
+                <p className={`text-dark-gray`}>Recently Played</p>
+              </div>
 
-            <GradientBlock
-              gradient
-              topSubtitle="Data from"
-              title={timeToDisplay(timeRange)}
-              bottomSubtitle="invisible"
-              order="md:order-[7]"
-              invisible={true}
-              time={true}
-            />
+            </div>
 
-            <ImageBlock
-              image={userData.recentlyPlayed.image}
-              topSubtitle="Last Played"
-              title={userData.recentlyPlayed.name}
-              bottomSubtitle={`By ${userData.recentlyPlayed.artist}`}
-              order="md:order-[8]"
-              textSize={checkStrLength(userData.recentlyPlayed.name)}
-            />
+            <div>
+              <div className={`flex items-center space-x-2 mb-4`}>
+                <img src={RankingIcon} alt="ranking icon" className={`w-6 md:w-8`}/>
+                <h2 className={`text-2xl font-semibold`}>Your Top 10 Tracks</h2>
+              </div>
+              {
+                userData.topTracks.tracks.map((item, index) => {
+                  return <RankingBlock key={index} ranking={index+1} track={item.name} artist={item.artist} image={item.image} popularity={item.popularity} isTrack={true}/>
+                }
+              )}
+            </div>
 
-            <GradientBlock
-              gradient
-              icon={SpotifyIcon}
-              order="md:order-[9]"
-              spotifyBlock={true}
-            />
-
+            <div>
+              <div className={`flex items-center space-x-2 mb-4`}>
+                <img src={RankingIcon} alt="ranking icon" className={`w-6 md:w-8`}/>
+                <h2 className={`text-2xl font-semibold`}>Your Top 10 Artists</h2>
+              </div>
+              {
+                userData.topArtists.artists.map((item, index) => {
+                  return <RankingBlock key={index} ranking={index+1} artist={item.name} image={item.image} popularity={item.popularity} isTrack={false}/>
+                }
+              )}
+            </div>
           </div>
         )
       }
