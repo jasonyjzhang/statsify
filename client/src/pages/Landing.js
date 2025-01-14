@@ -1,8 +1,6 @@
-import SpotifyIconBlack from "../assets/spotify-icon-black.svg";
 import SpotifyIconWhite from "../assets/spotify-icon-white.svg";
-import LoginIcon from "../assets/login-icon.svg";
-import ListIcon from "../assets/list-icon.svg";
-import ResultsIcon from "../assets/results-icon.svg";
+import ArrowIcon from "../assets/arrow-icon.svg";
+import LandingImg from "../assets/landing.png";
 export default function Landing() {
   const handleClick = () => {
     window.location.href = 'https://statsify-backend.jasonzhang.studio/auth';
@@ -10,27 +8,24 @@ export default function Landing() {
   };
 
   return (
-    <div className={`h-[100svh] md:h-[100vh] md:w-[500px] flex flex-col justify-center items-center space-y-24`}>
-      <div className={`text-center tracking-wider md:tracking-widest`}>
-        <h1 className={`text-[2.5rem] font-bold leading-tight`}>STATSIFY</h1>
-        <p className={`font-light`}>powered by <img src={SpotifyIconWhite} alt="Spotify Icon" className={`w-[1.5rem] inline-block`}/></p>
-        <h2 className={`gradient-text text-[1.5rem] font-medium pt-4`}>Rewind. Retrack. Reveal.</h2>
+    <div className={`md:w-[600px] lg:w-[700px] flex flex-col items-center gap-y-12 md:gap-y-16`}>
+      <div className={`flex flex-col items-center text-center space-y-6 mt-24 md:mt-28`}>
+        <p className={`bg-custom-red/10 text-custom-red font-light rounded-full px-6 py-2`}>
+          powered by <img src={SpotifyIconWhite} alt="Spotify Icon" className={`w-[1.5rem] inline ml-1`}/>
+        </p>
+        <h2 className={`text-[2.5rem] md:text-6xl font-bold leading-tight md:leading-tight`}>Spotify Stats, <br/>Simplified</h2>
+        <h2 className={`w-[90%] lg:w-[70%] md:text-lg`}>
+          A <span className={`text-custom-red`}>personalized Spotify dashboard</span> that highlights your listening trends and insights over your selected time range—all in just a few clicks.
+        </h2>
       </div>
-      <div className={`md:space-y-12`}>
-        <p className={`hidden md:inline-block`}>Wondering what tunes or artists you've been vibing to lately or what your all-time faves are? With Statsify, you can dive into your music trends anytime with just a few clicks.</p>
-        <div className={`grid grid-cols-[auto_1fr] gap-x-4 gap-y-8 items-center`}>
-          <img src={LoginIcon}/>
-          <p>Step 1: Sign in with your Spotify account</p>
-          <img src={ListIcon}/>
-          <p>Step 2: Select a time range: 4 weeks, 6 months, or all-time</p>
-          <img src={ResultsIcon}/>
-          <p>Step 3: Sit back, relax, and let your music stats tell the story</p>
-        </div>
-      </div>
-      <button onClick={handleClick} className={`bg-gradient-summer w-full flex justify-center items-center rounded-lg py-4 text-dark font-semibold`}>
-        <img src={SpotifyIconBlack} alt="Spotify Icon" className={`w-[1.5rem] mr-3`} />
-        Sign in with Spotify
+      <button onClick={handleClick} className={`w-auto bg-gradient-summer rounded-full p-0.5`}>
+        <span className={`bg-dark flex justify-center rounded-full py-3 px-8`}>
+          <p className={`font-bold`}>Start Discovering</p>
+          <img src={ArrowIcon} alt="Arrow Icon" className={`w-6 ml-1`}/>
+        </span>
       </button>
+      <img src={LandingImg} alt="Application Prototype" className={`rounded-xl`}/>
+      <p className={`text-sm md:text-base font-light mb-2`}>Copyright © 2025 STATSIFY. All rights reserved.</p>
     </div>
   )
 };

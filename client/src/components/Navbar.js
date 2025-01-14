@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BackIcon from "../assets/back-icon.svg";
+import BackIconWhite from "../assets/back-icon-white.svg";
 
 export default function Navbar({ currentPage }) {
   const navigate = useNavigate();
@@ -8,6 +8,11 @@ export default function Navbar({ currentPage }) {
   const handleBack = () => {
     navigate("/time");
   }
+
+  const handleLogin = () => {
+    window.location.href = 'https://statsify-backend.jasonzhang.studio/auth';
+    console.log("Spotify OAuth flow started");
+  };
 
   const handleLogout = () => {
     axios.get(`https://statsify-backend.jasonzhang.studio/logout`, { withCredentials: true })
@@ -22,11 +27,12 @@ export default function Navbar({ currentPage }) {
   }
 
   return (
-    <div className={`${currentPage === '/' ? `hidden` : `absolute w-screen md:w-[500px] ${currentPage === '/data' && `md:w-[600px] lg:w-[700px]`} border-b-4 border-[#303030] h-14 flex items-center`}`}>
-      <div className={`w-full flex flex-row justify-between mx-10 md:mx-0`}>
-        <button onClick={handleBack} className={`${currentPage === '/data' ? 'flex' : 'hidden'}`}><img src={BackIcon} alt="Back Icon" className={`w-6`}/>Select Time</button>
-        <p className={`${currentPage === '/time' ? 'inline-block' : 'hidden'}`}>STATSIFY</p>
-        <button onClick={handleLogout}>Log Out</button>
+    <div className={`w-screen md:w-[600px] lg:w-[710px] h-14 flex items-center fixed md:top-4 bg-border-gray/80 backdrop-blur md:rounded z-10`}>
+      <div className={`w-full flex flex-row justify-between items-center mx-4`}>
+        <button onClick={handleBack} className={`${currentPage === '/data' ? 'flex' : 'hidden'}`}><img src={BackIconWhite} alt="Back Icon" className={`w-6`}/>Select Time</button>
+        <p className={`${currentPage === '/data' ? 'hidden' : 'inline'} font-bold border-l-4 border-custom-red pl-1`}>STATSIFY</p>
+        <button onClick={handleLogin} className={`${currentPage === '/' ? 'inline' : 'hidden'}`}>Get Started</button>
+        <button className={`${currentPage === '/' ? 'hidden' : 'inline'}`} onClick={handleLogout}>Log Out</button>
       </div>
     </div>
   )

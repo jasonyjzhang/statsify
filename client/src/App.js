@@ -14,7 +14,7 @@ export default function App() {
   }, [location]);
 
   return (
-    <div className={`flex justify-center mx-10 lg:mx-0`}>
+    <div className={`flex justify-center mx-4 lg:mx-0`}>
       <Navbar currentPage={currentPage} />
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -24,9 +24,3 @@ export default function App() {
     </div>
   )
 };
-/*
-      <Navbar currentPage={currentPage} />
-        <Route path="/" element={<Landing />} />
-        <Route path="/time" element={<Time setTimeRange={setTimeRange} />} />
-        <Route path="/data" element={<Data timeRange={timeRange} />} />
-*/

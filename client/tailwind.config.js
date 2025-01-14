@@ -4,7 +4,7 @@ module.exports = {
     screens: {
       'sm': '640px',
       'md': '768px',
-      'lg': '1280px',
+      'lg': '1080px',
     },
     extend: {
       backgroundImage: {
@@ -16,6 +16,7 @@ module.exports = {
         'dark-gray': '#666666',
         'border-gray': '#252525',
         'custom-red': '#FF7369',
+        'custom-orange' : '#FF9D77',
         'custom-yellow': '#FFD48E',
       },
     },
