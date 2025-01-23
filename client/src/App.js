@@ -14,7 +14,7 @@ export default function App() {
   }, [location]);
 
   return (
-    <div className={`flex justify-center mx-4 lg:mx-0`}>
+    <div className="flex flex-col items-center justify-center mx-4 lg:mx-0">
       <Navbar currentPage={currentPage} />
       <Routes>
         <Route path="/" element={<Landing />} />
